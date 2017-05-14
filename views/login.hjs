@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login form</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <form  action = '/login' method="post">
+    	<label for ="name"> Name</label>
+    	<input type="text" id ="name" name="name"><br>
+    	<label for = "password" > Password</label>
+    	<input type="password" id ="password" name="password">
+    	<br><input type="submit" id ="send" value="Ok">
+    </form>
+    
+  </body>
+</html>

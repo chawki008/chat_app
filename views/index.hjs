@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat room</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Chat room </h1>
+    <p>Welcome to the chat room </p><br>
+    <e><a href="/login">Login here</e> </a></i><br>
+   or<br>
+    <e><a href="/subscribe">Subscribe here </a></e>
+    
+  </body>
+</html>

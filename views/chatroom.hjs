@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat room</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Chat room </h1>
+    <p>Welcome to the chat room </p><br>
+    <p id ="user">{{user}}</p> <br>
+    <ul id ="text">
+          {{#messages}}
+        <li>{{creator.name}} : {{content}}</li>
+        {{/messages}}</li>
+    </ul>
+    <form id ="send" action="/chatroom" method="post">
+      <label for ="content"> Enter message </label>
+      <input type="text" name="content" id ="content">
+      <input type="submit" value="send">
+    </form>
+    <br><br><br><br>
+    <a href="/logout"> Logout </a>
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+        <script>    
+      var socket = io.connect('http://localhost:3000');
+      socket.emit('check','hey');
+      
+      $('#send').submit( () => {
+      socket.emit("msg",' : ' + $('#content').val());
+    $('#text').append('<li> me : ' + $('#content').val() + '</li>');
+      });
+     
+      socket.on('msg', function(msg) {
+            $('#text').append('<li>'+msg+'</li>');
+        });
+  
+      socket.on("nouveau",function(pseudo){
+    $('#text').append('<li>'+pseudo+' a connecté </li>');
+      });      
+       </script>
+  </body>
+</html>
