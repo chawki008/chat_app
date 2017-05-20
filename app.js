@@ -20,8 +20,8 @@ var login = require('./routes/login');
 var chatroom = require('./routes/chatroom');
 var app = express();
 var sharedsession = require("express-socket.io-session");
-  
-var io = require('socket.io').listen(app.listen(3000));
+var port = process.env.PORT || 8000;  
+var io = require('socket.io').listen(app.listen(port));
 
 app.use(session);
 
