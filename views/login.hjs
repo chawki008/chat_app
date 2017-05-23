@@ -5,13 +5,36 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <form  action = '/login' method="post">
+    <form  id ="login_form" action = '#' method="post">
     	<label for ="name"> Name</label>
     	<input type="text" id ="name" name="name"><br>
     	<label for = "password" > Password</label>
     	<input type="password" id ="password" name="password">
+      <br> <div id ="auth_error"></div>
     	<br><input type="submit" id ="send" value="Ok">
     </form>
-    
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script>    
+        $('#login_form').on("submit",function(e){
+          e.preventDefault();
+          $.post("/login",
+            { name:$("#name").val(),
+              password:$("#password").val()},
+            function(response){
+                  if (response === "0")
+                    $('#auth_error').append('<div style="color : red">'+
+                    'Invalid Credentials</div>');
+                  else if (response ==="1")        
+                    window.location.replace("/chatroom");   
+                  else if (response ==="2")
+                    $('#auth_error').append('<div style="color : red">'+
+                    'User is already connected !</div>');
+                  else 
+                    $('#auth_error').append('<div style="color : red">'+
+                    'unexpected error has occured !</div>');
+              });
+          });
+     
+      </script>
   </body>
 </html>

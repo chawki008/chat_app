@@ -4,7 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var lessMiddleware = require('less-middleware');
 var mongoose = require('mongoose');
 var users = require('./models/users');
 var index = require('./routes/index');
@@ -17,71 +16,28 @@ var session = require('express-session')({
 var parseurl = require('parseurl');
 var subscribe = require('./routes/subscribe')
 var login = require('./routes/login');
+var logout = require('./routes/logout');
 var chatroom = require('./routes/chatroom');
 var app = express();
-var sharedsession = require("express-socket.io-session");
-var port = process.env.PORT || 8000;  
-var io = require('socket.io').listen(app.listen(port));
-
+app.socket = require('./socket.js');
 app.use(session);
-
 app.use(cookieParser());
-if (session.user != undefined)
-      console.log(session.user);
-
-io.use(sharedsession(session,{autoSave:true}));
-
-io.on('connection', function (socket) {
-   socket.on('check',(msg)=>{
-     console.log(socket.handshake.session.c);
-     if (socket.handshake.session.c == 0)    
-      {socket.broadcast.emit("nouveau" , socket.handshake.session.user); 
-      socket.handshake.session.c += 1;
-    socket.handshake.session.save();}
-  });
-  socket.on('msg',function(msg){
-    socket.broadcast.emit('msg',socket.handshake.session.user+" "+ msg);
-    }); 
-  socket.on("pseudo",function(pseudo){
-    socket.broadcast.emit("nouveau",pseudo);
-  }); 
-});
-
-// view engine setup
+app.logout = logout;
+app.login = login;
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
-//app.set('trust proxy', 1) // trust first proxy
-// app.use(session({
-//   secret: 'sup duck' ,
-//   resave: false,
-//   saveUninitialized: true,
-//   //cookie: { secure: true }
-// }))
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.socket.setSession(session);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-//app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use(function(req,res,next){
-//     req.io = io;
-//     next();
-// });
-
 app.use('/', index);
 app.use('/subscribe',subscribe);
-app.use('/login',login);
+app.use('/login',app.login);
 app.use('/chatroom',chatroom);
-app.get('/logout',(req,res,next)=>{
-  req.session.destroy((err)=>{console.error(err);
-    res.redirect('/');})
-});
+app.use('/logout',app.logout);
 
-// var router = express.Router();
 
 
 
@@ -102,7 +58,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
 
 
 

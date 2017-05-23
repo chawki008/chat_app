@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var users = require('../models/users');
-
-
+var xss = require('xss');
+var passwordHash = require('password-hash');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -12,11 +12,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/',(req,res,next) => {
-	var name = req.body.name;
+	var name =  xss(req.body.name);
 	var password = req.body.password;
 	var user = new users({
 		 name:name,
-		 password:password
+		 password:passwordHash.generate(password)
 		});
 	user.save(function (err) {
 		  if (err) {
@@ -26,7 +26,8 @@ router.post('/',(req,res,next) => {
 		  	console.log("User "+name+" saved");
 			  }
 		});	
-	req.session.user = name;	
+	req.session.user = name;
+	req.session.c = 0;	
 	res.redirect('/');
 	
 });

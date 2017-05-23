@@ -4,17 +4,26 @@
   "scripts": {
     "start": "node ./bin/www"
   },
-  "engines":{ "node" : "5.9.1",
-  "npm" : "3.7.3" },
+  "engines": {
+    "node": "5.9.1",
+    "npm": "3.7.3"
+  },
   "dependencies": {
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "express": "~4.15.2",
+    "helmet": "^3.6.1",
     "hjs": "~0.0.6",
     "less-middleware": "~2.2.0",
     "mongoose": "^4.9.2",
     "morgan": "~1.8.1",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "express-socket.io-session":"*",
+    "express-session":"*",
+    "path":"*",
+    "parseurl":"*",
+    "socket.io":"*",
+    "password-hash":"*"
   }
 }
