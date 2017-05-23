@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
   	cursor.on('close',() => {
   		var toSendMessages =[];
   		for (var i = 1; i<6 ; i++){
-        let message = allMessages[allMessages.length-i];
+        var message = allMessages[allMessages.length-i];
         if(message.creator.name === req.session.user)
           message.creator.name = "me";
   			toSendMessages.push(message);
