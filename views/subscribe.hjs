@@ -5,12 +5,33 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <form action = '/subscribe' method="post">
+    <form id ="f" action = '/subscribe' method="post">
+    <label id="dis"></label><br>
     	<label for ="name"> Name</label>
     	<input type="text" id ="name" name="name"><br>
     	<label for = "password" > Password</label>
     	<input type="password" id ="password" name="password">
     	<br><input type="submit" value="Ok">
     </form>
+          <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <script type="text/javascript">
+      $("#f").on("submit",function(e){
+        var username=$('#name').val();
+          var password=$('#password').val();
+
+          if(username=="")
+          {
+          $('#dis').slideDown().html("<span>Please type Username</span>");
+          e.preventDefault();
+          }
+          if(password=="")
+          {
+          $('#dis').slideDown().html('<span id="error">Please type Password</span>');
+          e.preventDefault();
+          }
+      
+      });
+    </script>
   </body>
 </html>
