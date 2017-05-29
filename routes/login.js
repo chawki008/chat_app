@@ -4,13 +4,17 @@ var users = require('../models/users');
 router.socket = null;
 var xss = require('xss');
 var passwordHash = require('password-hash');
-
 /* GET home page. */
+
+
+
 router.get('/', function(req, res, next) {
   if (req.session.user != undefined)
   	res.redirect('/');
-  else 
+  else {
   	res.render('login');
+    }
+  
 
 });
 
@@ -34,6 +38,7 @@ else{
       else{
     		req.session.user = name;
         req.session.c = 0;
+        res.cookie('loggedIn' , name,{ maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: true });
     		res.send("1");
           }
 	   }

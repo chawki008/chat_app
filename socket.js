@@ -7,11 +7,10 @@ var socketiO =  {
 	this.io = require('socket.io').listen(this.listenningServer);
 	var sharedsession = require("express-socket.io-session");
 	this.io.use(sharedsession(this.session,{autoSave:true}));
-
 	this.io.on('connection', function (socket) {
 	  socket.on('check',(msg)=>{
-	  socketiO.clients.push(socket.handshake.session.user);
-	  		
+	  	if(socketiO.clients.indexOf(socket.handshake.session.user)!== -1)
+	  			socketiO.clients.push(socket.handshake.session.user);
 	      if (socket.handshake.session.c == 0)  {
 	          socket.broadcast.emit("nouveau" , socket.handshake.session.user); 
 	          socket.handshake.session.c += 1;

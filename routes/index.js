@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
   	allUsers.push(doc);
   });
   cursor.on('close',()=>{
-  	allUsers.forEach((e) => {console.log(e);})
+  	allUsers.forEach((e) => {})
   res.render('index', { user: req.session.user });
 	});
 	}

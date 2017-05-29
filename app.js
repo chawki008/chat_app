@@ -13,24 +13,25 @@ var session = require('express-session')({
   saveUninitialized: true, 
   cookie:{maxAge: null}
   });
+var cookie_checker = require("./middleware/cookie-checker");
 var parseurl = require('parseurl');
 var subscribe = require('./routes/subscribe')
 var login = require('./routes/login');
 var logout = require('./routes/logout');
 var chatroom = require('./routes/chatroom');
 var app = express();
-app.socket = require('./socket.js');
 app.use(session);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.socket = require('./socket.js');
 app.use(cookieParser());
+app.use(cookie_checker);
 app.logout = logout;
 app.login = login;
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
 app.socket.setSession(session);
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/subscribe',subscribe);
