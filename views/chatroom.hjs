@@ -23,8 +23,8 @@
       <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
         <script>    
-      var socket = io.connect('http://127.0.0.1:8000');
-      // var socket = io.connect('https://enigma-chat.herokuapp.com');
+      // var socket = io.connect('http://127.0.0.1:8000');
+      var socket = io.connect('https://enigma-chat.herokuapp.com');
       socket.emit('check','hey');
       
       $('#send').submit( (e) => {
