@@ -19,7 +19,44 @@ var subscribe = require('./routes/subscribe')
 var login = require('./routes/login');
 var logout = require('./routes/logout');
 var chatroom = require('./routes/chatroom');
+var sendAuthMail = require("./routes/sendAuthMail");
+var config = require("./config");
 var app = express();
+var mailer = require('express-mailer');
+var NodeRSA = require('node-rsa');
+var fs = require('fs');
+
+
+
+
+
+fs.readFile("privateKey", function(err,data) {
+    if(err) {
+        return console.log(err);
+    }
+  var key = new NodeRSA(data.toString());
+  mailer.extend(app, {
+    from: 'chawki.cheikh008@gmail.com',
+    host: 'smtp.gmail.com', // hostname 
+    secureConnection: true, // use SSL 
+    port: 465, // port for secure SMTP 
+    transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts 
+    auth: {
+      user: 'chawki.cheikh008@gmail.com',
+      pass: key.decrypt(config.mailPassword).toString()
+    }
+  });
+  sendAuthMail.mailer = app.mailer;
+    
+}); 
+ 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hjs');
+
+
+
+
+
 app.use(session);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,8 +65,6 @@ app.use(cookieParser());
 app.use(cookie_checker);
 app.logout = logout;
 app.login = login;
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hjs');
 app.socket.setSession(session);
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -38,7 +73,8 @@ app.use('/subscribe',subscribe);
 app.use('/login',app.login);
 app.use('/chatroom',chatroom);
 app.use('/logout',app.logout);
-
+app.use('/sendAuthMail',sendAuthMail);
+// sendAuthMail.generate();
 
 
 

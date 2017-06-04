@@ -5,30 +5,35 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <form id ="f" action = '/subscribe' method="post">
+    <form id ="f" action = '/subscribe?token={{token}}' method="post">
     <label id="dis"></label><br>
-    	<label for ="name"> Name</label>
-    	<input type="text" id ="name" name="name"><br>
-    	<label for = "password" > Password</label>
-    	<input type="password" id ="password" name="password">
+    	<label for ="nam"> Name</label>
+    	<input type="text" id ="nam" name="nam"><br>
+    	<label for = "pass" > Password</label>
+    	<input type="password" id ="pass" name="pass">
     	<br><input type="submit" value="Ok">
     </form>
           <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
     <script type="text/javascript">
       $("#f").on("submit",function(e){
-        var username=$('#name').val();
-          var password=$('#password').val();
+          e.preventDefault();
+          var username=$('#nam').val();
+          var password=$('#pass').val();
 
-          if(username=="")
-          {
-          $('#dis').slideDown().html("<span>Please type Username</span>");
-          e.preventDefault();
+          if(username=="" || username.length < 3 || username.length > 40){
+              $('#dis').slideDown().html("<span>Please type a correct Username</span>");
           }
-          if(password=="")
-          {
-          $('#dis').slideDown().html('<span id="error">Please type Password</span>');
-          e.preventDefault();
+          else if(password==""|| password.length < 3 || password.length > 30){
+              $('#dis').slideDown().html('<span id="error">Please type a correct Password</span>');
+          }else{ 
+              $.post("/subscribe?token={{token}}",{nam:username,pass:password},
+                function(response){
+                   if(response =="0") 
+                        $('#dis').slideDown().html("<span>User Already exists</span>");
+                   else if (response == "1")
+                      window.location.replace("/chatroom");   
+                });
           }
       
       });
